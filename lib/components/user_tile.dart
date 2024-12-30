@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UserTile extends StatelessWidget {
-  final String email;
+  Map<String,dynamic> data;
+
   final void Function() onTapCallBack;
-  const UserTile({super.key, required this.email, required this.onTapCallBack});
+  UserTile({super.key, required this.data, required this.onTapCallBack});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +22,12 @@ class UserTile extends StatelessWidget {
             ///icon
             const Icon(Icons.person),
 
-            SizedBox(
+            const SizedBox(
               width: 10.0,
             ),
 
             ///email
-            Text(email)
+            Text(data['email'])
           ],
         ),
       ),
