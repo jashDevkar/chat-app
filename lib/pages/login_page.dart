@@ -2,7 +2,7 @@ import 'package:chat_app/components/error_dialog_box.dart';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/pages/register_page.dart';
-import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/auth_service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -13,21 +13,16 @@ class LoginPage extends StatelessWidget {
 
   final TextEditingController passwordController = TextEditingController();
 
-  final AuthService _auth = AuthService();
+  final AuthService _authService = AuthService();
 
   void login(context) async {
-    ///try login with email and password
     try {
-      await _auth.login(
+      await _authService.login(
           email: emailController.text, password: passwordController.text);
-    }
-
-    ///catch error if any and show a snack bar...
-    catch (e) {
-      dialogBox(context,e);
+    } catch (e) {
+      dialogBox(context, e.toString());
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +106,9 @@ class LoginPage extends StatelessWidget {
                   onTap: () => Navigator.push(
                     context,
                     PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: RegisterPage()),
+                      type: PageTransitionType.rightToLeft,
+                      child: RegisterPage(),
+                    ),
                   ),
                   child: const Text(
                     'Register now',

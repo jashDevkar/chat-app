@@ -1,7 +1,7 @@
 import 'package:chat_app/components/error_dialog_box.dart';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
-import 'package:chat_app/services/auth_service.dart';
+import 'package:chat_app/services/auth_service/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -12,23 +12,19 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
-  final AuthService _auth = AuthService();
+  final AuthService _authService = AuthService();
 
   void register(context) async {
-    if(passwordController.text == confirmPasswordController.text){
+    if (passwordController.text == confirmPasswordController.text) {
       try {
-      await _auth.register(
-          email: emailController.text, password: passwordController.text);
-      Navigator.pop(context);
-    }
-
-    ///catch error if any and show a snack bar...
-    catch (e) {
-      dialogBox(context, e);
-    }
-    }
-    else{
-      dialogBox(context, 'Passwords didn\'t match');
+        await _authService.register(
+            email: emailController.text, password: passwordController.text);
+        Navigator.pop(context);
+      } catch (e) {
+        dialogBox(context, e.toString());
+      }
+    } else {
+      dialogBox(context, 'password didnt matched');
     }
   }
 

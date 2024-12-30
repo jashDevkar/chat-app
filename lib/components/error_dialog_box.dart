@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<dynamic> dialogBox(context, e) async {
+Future<dynamic> dialogBox(context, String e) async {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
@@ -10,7 +10,7 @@ Future<dynamic> dialogBox(context, e) async {
       ),
       title: const Text("Error"),
       content: Text(
-        e.toString(),
+        e,
         textAlign: TextAlign.center,
       ),
       actions: [
