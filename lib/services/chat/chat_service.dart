@@ -17,7 +17,8 @@ class ChatService {
     });
   }
 
-  void sendMessage({required String recieverId, required String text}) async{
+  Future<void> sendMessage(
+      {required String recieverId, required String text}) async {
     ///recieve all data that will be stored in firestore
     final String senderEmail = _authService.currentUserEmail;
     final String senderId = _firebaseAuth.currentUser!.uid;
@@ -41,5 +42,18 @@ class ChatService {
         .doc(roomId)
         .collection('messages')
         .add(message.toMap());
+  }
+
+  Stream<QuerySnapshot> getMessages({required String recieverID}) {
+    final String senderId = _firebaseAuth.currentUser!.uid;
+    List<String> ids = [senderId, recieverID];
+    ids.sort();
+    String roomId = ids.join('_');
+    return _firebaseFirestore
+        .collection('chat_rooms')
+        .doc(roomId)
+        .collection('messages')
+        .orderBy('timestamp', descending: false)
+        .snapshots();
   }
 }

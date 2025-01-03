@@ -3,6 +3,7 @@ import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/pages/register_page.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -16,11 +17,15 @@ class LoginPage extends StatelessWidget {
   final AuthService _authService = AuthService();
 
   void login(context) async {
-    try {
-      await _authService.login(
-          email: emailController.text, password: passwordController.text);
-    } catch (e) {
-      dialogBox(context, e.toString());
+    if (emailController.text.isNotEmpty && passwordController.text.isNotEmpty) {
+      try {
+        await _authService.login(
+            email: emailController.text, password: passwordController.text);
+      } catch (e) {
+        dialogBox(context, e.toString());
+      }
+    } else {
+      dialogBox(context, 'All fields are required');
     }
   }
 
@@ -39,29 +44,26 @@ class LoginPage extends StatelessWidget {
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(
-              child: Icon(
-                Icons.message,
-                size: 70,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
+                child: SizedBox(
+              height: 130,
+              child: Image.asset('assets/images/flash.png'),
+            )),
 
             const SizedBox(
               height: 25.0,
             ),
-
-            ///welcome back text
             const Text(
               'Welcome back!',
               textAlign: TextAlign.center,
+              style: kGreetingsStyle,
             ),
 
             const SizedBox(
-              height: 10.0,
+              height: 15.0,
             ),
 
             ///email text field
@@ -100,7 +102,7 @@ class LoginPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Dont\' have an account?'),
+                const Text('Don\'t have an account?'),
                 const SizedBox(width: 5.0),
                 GestureDetector(
                   onTap: () => Navigator.push(

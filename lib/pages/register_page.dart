@@ -2,6 +2,7 @@ import 'package:chat_app/components/error_dialog_box.dart';
 import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -16,12 +17,18 @@ class RegisterPage extends StatelessWidget {
 
   void register(context) async {
     if (passwordController.text == confirmPasswordController.text) {
-      try {
-        await _authService.register(
-            email: emailController.text, password: passwordController.text);
-        Navigator.pop(context);
-      } catch (e) {
-        dialogBox(context, e.toString());
+      if (emailController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          confirmPasswordController.text.isNotEmpty) {
+        try {
+          await _authService.register(
+              email: emailController.text, password: passwordController.text);
+          Navigator.pop(context);
+        } catch (e) {
+          dialogBox(context, e.toString());
+        }
+      } else {
+        dialogBox(context, 'All fields are required');
       }
     } else {
       dialogBox(context, 'password didnt matched');
@@ -34,6 +41,13 @@ class RegisterPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 4.0,
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
           'Register',
           style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -47,12 +61,12 @@ class RegisterPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Flexible(
-              child: Icon(
-                Icons.message,
-                size: 70,
-                color: Theme.of(context).colorScheme.primary,
+                child: SizedBox(
+              height: 130,
+              child: Image.asset(
+                'assets/images/flash.png',
               ),
-            ),
+            )),
 
             const SizedBox(
               height: 25.0,
@@ -62,10 +76,11 @@ class RegisterPage extends StatelessWidget {
             const Text(
               'Lets create an account!',
               textAlign: TextAlign.center,
+              style: kGreetingsStyle,
             ),
 
             const SizedBox(
-              height: 10.0,
+              height: 15.0,
             ),
 
             ///email text field
