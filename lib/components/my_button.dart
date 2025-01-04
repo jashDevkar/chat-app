@@ -12,11 +12,10 @@ class MyButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(
-          foregroundColor: Theme.of(context).colorScheme.secondary,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        ),
+            foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            backgroundColor: const Color(0xff3B82F6)),
         child: Text(text),
       ),
     );

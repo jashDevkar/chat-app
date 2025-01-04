@@ -22,26 +22,26 @@ class MessageBubble extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(left: 5.0, right: 10.0, top: 5.0),
           padding: const EdgeInsetsDirectional.symmetric(
-              horizontal: 15.0, vertical: 10.0),
+              horizontal: 18.0, vertical: 10.0),
           decoration: BoxDecoration(
             color: mssgFromCurrentSender
-                ? Theme.of(context).colorScheme.primary
+                ? const Color(0xff3B82F6)
                 : Theme.of(context).colorScheme.tertiary,
             borderRadius: mssgFromCurrentSender
                 ? firstMessage
                     ? const BorderRadiusDirectional.only(
-                        topStart: Radius.circular(30.0),
-                        bottomStart: Radius.circular(30.0),
-                        bottomEnd: Radius.circular(30.0),
+                        topStart: Radius.circular(15.0),
+                        bottomStart: Radius.circular(15.0),
+                        bottomEnd: Radius.circular(15.0),
                       )
-                    : BorderRadius.circular(30.0)
+                    : BorderRadius.circular(15.0)
                 : firstMessage
                     ? const BorderRadiusDirectional.only(
-                        topEnd: Radius.circular(30.0),
-                        bottomStart: Radius.circular(30.0),
-                        bottomEnd: Radius.circular(30.0),
+                        topEnd: Radius.circular(15.0),
+                        bottomStart: Radius.circular(15.0),
+                        bottomEnd: Radius.circular(15.0),
                       )
-                    : BorderRadius.circular(30.0),
+                    : BorderRadius.circular(15.0),
           ),
           child: Text(
             doc['message'],

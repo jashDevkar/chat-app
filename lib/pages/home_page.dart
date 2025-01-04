@@ -1,66 +1,19 @@
+import 'package:chat_app/components/error_dialog_box.dart';
 import 'package:chat_app/components/user_tile.dart';
 import 'package:chat_app/pages/chat_page.dart';
+import 'package:chat_app/pages/settings_page.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+
+final AuthService authService = AuthService();
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
 
   final AuthService _authService = AuthService();
   final ChatService _chatService = ChatService();
-
-  void logout(context) async {
-    ///show dialog box before loging out
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          icon: const Icon(Icons.error),
-          iconColor: Colors.red,
-          title: const Text('Hey User!'),
-          content: const Text(
-            'Are you sure you want to log out?',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text(
-                'cancel',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                Navigator.pop(context);
-                await _authService.logout();
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    side: BorderSide(
-                        color: Theme.of(context).colorScheme.primary)),
-              ),
-              child: const Text(
-                'Logout',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +71,13 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.settings),
               title: GestureDetector(
-                onTap: () {},
+                onTap: () => Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.leftToRight,
+                    child: SettingsPage(),
+                  ),
+                ),
                 child: const Text('Settings'),
               ),
             ),
@@ -127,7 +86,10 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.logout),
               title: GestureDetector(
-                onTap: () => logout(context),
+                onTap: () => showDialogOnLogout(
+                    context,content:  'Are you sure you want to log out?',buttonText:'Logout' ,onPressCallBack:  () async {
+                  await authService.logout();
+                }),
                 child: const Text('Logout'),
               ),
             ),

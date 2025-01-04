@@ -1,7 +1,9 @@
 import 'package:chat_app/components/chat_input_field.dart';
-import 'package:chat_app/message_bubble/message_bubble.dart';
+import 'package:chat_app/components/error_dialog_box.dart';
+import 'package:chat_app/components/message_bubble.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatelessWidget {
@@ -10,9 +12,13 @@ class ChatPage extends StatelessWidget {
   ChatPage({super.key, required this.recieverId, required this.recieverEmail});
 
   final TextEditingController chatController = TextEditingController();
+
   final ChatService _chatService = ChatService();
+
   final AuthService _authService = AuthService();
+
   String? sender;
+
   bool firstMessage = true;
 
   void sendMessage() async {
@@ -30,11 +36,12 @@ class ChatPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back_rounded,
-                color: Colors.white,
-              )),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.white,
+            ),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           title: Text(
             recieverEmail,
@@ -42,6 +49,20 @@ class ChatPage extends StatelessWidget {
                 fontSize: 18, color: Theme.of(context).colorScheme.secondary),
           ),
           centerTitle: true,
+          actions: [
+            IconButton(
+                onPressed: () => showDialogOnLogout(
+                      context,
+                      content: 'Delete all chat?',
+                      buttonText: 'Delete',
+                      onPressCallBack: () async {
+                        sender = null;
+                        ChatService chatService = ChatService();
+                        await chatService.deleteAllChat(recieverId: recieverId);
+                      },
+                    ),
+                icon: const Icon(Icons.delete))
+          ],
         ),
         body: Column(
           children: [
@@ -51,11 +72,13 @@ class ChatPage extends StatelessWidget {
                   const EdgeInsets.only(right: 10.0, left: 5.0, bottom: 10.0),
               child: Row(
                 children: [
-                  ChatInputField(chatController: chatController),
+                  ChatInputField(
+                    chatController: chatController,
+                  ),
                   IconButton(
                     onPressed: sendMessage,
                     style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: const Color(0xff3B82F6),
                     ),
                     color: Theme.of(context).colorScheme.secondary,
                     icon: const Icon(
@@ -76,7 +99,7 @@ class ChatPage extends StatelessWidget {
 
   Widget messageStream(BuildContext context) {
     return StreamBuilder(
-      stream: _chatService.getMessages(recieverID: recieverId),
+      stream: _chatService.getMessages(recieverId: recieverId),
       builder: (context, snapshot) {
         ///check if it is waiting if yes than show loading screen
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -92,12 +115,16 @@ class ChatPage extends StatelessWidget {
 
         ///else show all data if data is present
         final data = snapshot.data!.docs;
+        sender = null;
+        firstMessage = true;
+
+        ///check if data is not empty
         if (data.isNotEmpty) {
           return Container(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: ListView(
-              children: data.map(
-                (doc) {
+              children: data.map<MessageBubble>(
+                (DocumentSnapshot doc) {
                   final mssgFromCurrentSender =
                       doc['senderEmail'] == _authService.currentUserEmail
                           ? true
@@ -111,8 +138,8 @@ class ChatPage extends StatelessWidget {
                     sender = doc['senderEmail'];
                     firstMessage = true;
                   }
-                  final alignment =
-                      doc['senderEmail'] == _authService.currentUserEmail
+                  final CrossAxisAlignment alignment =
+                      doc['senderEmail'] == mssgFromCurrentSender
                           ? CrossAxisAlignment.end
                           : CrossAxisAlignment.start;
 

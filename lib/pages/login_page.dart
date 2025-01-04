@@ -3,9 +3,11 @@ import 'package:chat_app/components/my_button.dart';
 import 'package:chat_app/components/my_textfield.dart';
 import 'package:chat_app/pages/register_page.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
+import 'package:chat_app/themes/theme_provider.dart';
 import 'package:chat_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -31,6 +33,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = Provider.of<ThemeProvider>(context).isDarkMode;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -112,9 +115,11 @@ class LoginPage extends StatelessWidget {
                       child: RegisterPage(),
                     ),
                   ),
-                  child: const Text(
+                  child: Text(
                     'Register now',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: isDark ? Colors.yellowAccent : null),
                   ),
                 ),
               ],

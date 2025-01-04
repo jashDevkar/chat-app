@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class ChatInputField extends StatelessWidget {
   final TextEditingController chatController;
-  ChatInputField({super.key, required this.chatController});
+  FocusNode? focusNode;
+  ChatInputField({super.key, required this.chatController, this.focusNode});
 
   final ScrollController _scrollController = ScrollController();
 
@@ -22,6 +23,7 @@ class ChatInputField extends StatelessWidget {
             controller: _scrollController,
             thumbVisibility: true,
             child: TextField(
+              focusNode: focusNode,
               scrollController: _scrollController,
               keyboardType: TextInputType.multiline,
               controller: chatController,
