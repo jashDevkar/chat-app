@@ -16,15 +16,6 @@ class AuthService {
     try {
       final UserCredential userCredential = await _firebaseAuth
           .signInWithEmailAndPassword(email: email, password: password);
-      
-      ///after they are login if doccument is not present in firestore than store it
-      final uid = userCredential.user!.uid;
-      final CollectionReference reference =
-          _firebaseFirestore.collection('Users');
-      reference.doc(email).set({
-        'email': email,
-        'uid': uid,
-      });
 
       ///return user data after login
       return userCredential;
@@ -53,8 +44,8 @@ class AuthService {
       final uid = userCredential.user!.uid;
       final CollectionReference reference =
           _firebaseFirestore.collection('Users');
-      reference.doc(email).set({
-        'email': email,
+      await reference.doc(email.toLowerCase()).set({
+        'email': email.toLowerCase(),
         'uid': uid,
       });
 

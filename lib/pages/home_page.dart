@@ -74,7 +74,7 @@ class HomePage extends StatelessWidget {
                 onTap: () => Navigator.push(
                   context,
                   PageTransition(
-                    type: PageTransitionType.leftToRight,
+                    type: PageTransitionType.bottomToTop,
                     child: SettingsPage(),
                   ),
                 ),
@@ -86,8 +86,10 @@ class HomePage extends StatelessWidget {
             ListTile(
               leading: const Icon(Icons.logout),
               title: GestureDetector(
-                onTap: () => showDialogOnLogout(
-                    context,content:  'Are you sure you want to log out?',buttonText:'Logout' ,onPressCallBack:  () async {
+                onTap: () => showDialogOnLogout(context,
+                    title: 'Hey user!',
+                    content: 'Are you sure you want to log out?',
+                    buttonText: 'Logout', onPressCallBack: () async {
                   await authService.logout();
                 }),
                 child: const Text('Logout'),
@@ -102,7 +104,7 @@ class HomePage extends StatelessWidget {
 
   Widget userStream(BuildContext context) {
     return StreamBuilder(
-        stream: _chatService.getUsers(),
+        stream: _chatService.getAllUsersExceptBlocked(),
         builder: (context, snapshot) {
           final data = snapshot.data;
 
@@ -120,25 +122,21 @@ class HomePage extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.only(top: 10.0),
             children: data!.map((user) {
-              if (user['email'] != _authService.currentUserEmail) {
-                return UserTile(
-                  data: user,
-                  onTapCallBack: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                        type: PageTransitionType.rightToLeft,
-                        child: ChatPage(
-                          recieverId: user['uid'],
-                          recieverEmail: user['email'],
-                        ),
+              return UserTile(
+                data: user,
+                onTapCallBack: () {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      type: PageTransitionType.rightToLeft,
+                      child: ChatPage(
+                        recieverId: user['uid'],
+                        recieverEmail: user['email'],
                       ),
-                    );
-                  },
-                );
-              } else {
-                return Container();
-              }
+                    ),
+                  );
+                },
+              );
             }).toList(),
           );
         });

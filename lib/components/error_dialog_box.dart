@@ -36,6 +36,7 @@ Future<dynamic> dialogBox(context, String e) async {
 void showDialogOnLogout(BuildContext context,
     {required String content,
     required Function onPressCallBack,
+    required String title,
     required buttonText}) async {
   showDialog(
     context: context,
@@ -43,7 +44,7 @@ void showDialogOnLogout(BuildContext context,
       return AlertDialog(
         icon: const Icon(Icons.error),
         iconColor: Colors.red,
-        title: const Text('Hey User!'),
+        title: Text(title),
         content: Text(
           content,
           textAlign: TextAlign.center,

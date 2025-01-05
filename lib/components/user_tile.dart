@@ -16,11 +16,12 @@ class UserTile extends StatelessWidget {
       onTap: onTapCallBack,
       child: Card(
         color: Theme.of(context).cardColor,
+        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
           padding:
-              const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 20),
+              const EdgeInsets.only(left: 10, right: 10, top: 25, bottom: 25),
           child: Row(
             children: [
               ///icon
@@ -37,7 +38,8 @@ class UserTile extends StatelessWidget {
               Text(
                 data['email'],
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.inversePrimary),
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               )
             ],
           ),
