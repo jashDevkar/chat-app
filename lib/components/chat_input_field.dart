@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ChatInputField extends StatelessWidget {
   final TextEditingController chatController;
   FocusNode? focusNode;

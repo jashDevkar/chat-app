@@ -1,8 +1,10 @@
+import 'package:chat_app/components/error_dialog_box.dart';
 import 'package:chat_app/components/user_tile.dart';
 import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:chat_app/services/chat/chat_service.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class BlockedUserPage extends StatelessWidget {
   BlockedUserPage({super.key});
 
@@ -10,49 +12,10 @@ class BlockedUserPage extends StatelessWidget {
   AuthService _authService = AuthService();
 
   void _showDialogToUnblock(context, {required String userEmail}) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: const Text('Unblock user?'),
-              content: Text('Unblock $userEmail ?'),
-              actions: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'cancel',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _chatService.unBlockUser(userId: userEmail);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      side: const BorderSide(
-                        color: Color(0xff3B82F6),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    'Unblock',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.inversePrimary,
-                    ),
-                  ),
-                ),
-              ],
-            ));
+    showDialogOnLogout(context, content: 'Unblock $userEmail ?',
+        onPressCallBack: () async {
+      _chatService.unBlockUser(userEmail: userEmail);
+    }, title: 'Unblock', buttonText: 'Unblock');
   }
 
   @override
@@ -86,7 +49,7 @@ class BlockedUserPage extends StatelessWidget {
             );
           }
           if (data!.isEmpty) {
-            return Center(
+            return const Center(
               child: Text('No blocked users'),
             );
           }

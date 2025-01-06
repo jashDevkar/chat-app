@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class MyTextfield extends StatelessWidget {
   final String hintText;
   final bool isObscure;

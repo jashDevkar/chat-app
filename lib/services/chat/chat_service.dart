@@ -134,13 +134,13 @@ class ChatService extends ChangeNotifier {
   }
 
   /// Unblock user
-  Future<void> unBlockUser({required String userId}) async {
+  Future<void> unBlockUser({required String userEmail}) async {
     final currentUser = _firebaseAuth.currentUser;
     await _firebaseFirestore
         .collection('Users')
         .doc(currentUser!.email)
         .collection('BlockedUsers')
-        .doc(userId)
+        .doc(userEmail)
         .delete();
     notifyListeners();
   }

@@ -43,8 +43,8 @@ class MessageBubble extends StatelessWidget {
                   leading: const Icon(Icons.block),
                   title: const Text('Block user'),
                   onTap: () {
-                    _blockUser(context);
                     Navigator.pop(context);
+                    _blockUser(context);
                   },
                 ),
 
@@ -62,17 +62,27 @@ class MessageBubble extends StatelessWidget {
   }
 
   // report message
-  void _reportMessage(context) {}
+  void _reportMessage(context) {
+    showDialogOnLogout(context, content: 'Report  "${doc['message']}" ?',
+        onPressCallBack: () async {
+      await chatservice.reportMessage(
+          message: doc['message'], userEmail: userEmail);
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Message Reported!')));
+    }, title: 'Report?', buttonText: 'Report');
+  }
 
   //block user
 
-  void _blockUser(context) {
-    showDialogOnLogout(context, content: 'Are you sure you want to block user?',
+  void _blockUser(context) async {
+     showDialogOnLogout(context,
+        content: 'Are you sure you want to block user?',
         onPressCallBack: () async {
       await chatservice.blockUser(userEmail: userEmail);
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('User blocked!')));
+          .showSnackBar(const SnackBar(content: Text('User blocked!')));
     }, title: 'Block!', buttonText: 'Block');
+    
   }
 
   @override
