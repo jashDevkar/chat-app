@@ -15,9 +15,9 @@ class ChatPage extends StatelessWidget {
 
   void sendMessage() async {
     if (chatController.text.isNotEmpty) {
+      chatController.clear();
       await _chatService.sendMessage(
           recieverId: recieverId, text: chatController.text);
-      chatController.clear();
     }
   }
 
@@ -46,6 +46,7 @@ class ChatPage extends StatelessWidget {
                 onPressed: () => showDialogOnLogout(
                       context,
                       title: 'Delete!',
+                      scaffoldMessage: 'All messages deleted!',
                       content: 'Delete all chat?',
                       buttonText: 'Delete',
                       onPressCallBack: () async {

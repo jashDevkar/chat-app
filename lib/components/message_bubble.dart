@@ -18,7 +18,7 @@ class MessageBubble extends StatelessWidget {
       required this.mssgFromCurrentSender,
       required this.userEmail});
 
-  ChatService chatservice = ChatService();
+  final ChatService _chatservice = ChatService();
 
   ///void show modal from bottom
   Future<void> showBottomModal(context, String userEmail) async {
@@ -62,27 +62,25 @@ class MessageBubble extends StatelessWidget {
   }
 
   // report message
-  void _reportMessage(context) {
-    showDialogOnLogout(context, content: 'Report  "${doc['message']}" ?',
-        onPressCallBack: () async {
-      await chatservice.reportMessage(
-          message: doc['message'], userEmail: userEmail);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Message Reported!')));
-    }, title: 'Report?', buttonText: 'Report');
+  void _reportMessage(BuildContext context)  {
+     showDialogOnLogout(context,
+        scaffoldMessage: 'Message reported!',
+        content: 'Are you sre you want to logout?', onPressCallBack: () async {
+      await _chatservice.reportMessage(
+        message: doc['message'],
+        userEmail: userEmail,
+      );
+    }, title: 'Report', buttonText: 'Report');
   }
 
   //block user
 
   void _blockUser(context) async {
-     showDialogOnLogout(context,
+    showDialogOnLogout(context,
         content: 'Are you sure you want to block user?',
-        onPressCallBack: () async {
-      await chatservice.blockUser(userEmail: userEmail);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('User blocked!')));
+        scaffoldMessage: '$userEmail blocked!', onPressCallBack: () async {
+      await _chatservice.blockUser(userEmail: userEmail);
     }, title: 'Block!', buttonText: 'Block');
-    
   }
 
   @override

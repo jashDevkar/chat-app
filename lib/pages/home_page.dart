@@ -88,6 +88,7 @@ class HomePage extends StatelessWidget {
               title: GestureDetector(
                 onTap: () => showDialogOnLogout(context,
                     title: 'Hey user!',
+                    scaffoldMessage: 'User Loged Out',
                     content: 'Are you sure you want to log out?',
                     buttonText: 'Logout', onPressCallBack: () async {
                   await authService.logout();
@@ -123,7 +124,7 @@ class HomePage extends StatelessWidget {
             padding: const EdgeInsets.only(top: 10.0),
             children: data!.map((user) {
               return UserTile(
-                data: user,
+                userEmail: user['email'],
                 onTapCallBack: () {
                   Navigator.push(
                     context,

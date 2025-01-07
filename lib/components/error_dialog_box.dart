@@ -33,10 +33,11 @@ Future<dynamic> dialogBox(context, String e) async {
 }
 
 ///this will display a dialog box whenever logout button is clicked
-void showDialogOnLogout(BuildContext context,
+Future<void> showDialogOnLogout(BuildContext context,
     {required String content,
-    required Function onPressCallBack,
+    required void Function() onPressCallBack,
     required String title,
+    required String scaffoldMessage,
     required buttonText}) async {
   await showDialog(
     context: context,
@@ -66,6 +67,8 @@ void showDialogOnLogout(BuildContext context,
           onPressed: () {
             Navigator.pop(context);
             onPressCallBack();
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(scaffoldMessage)));
           },
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(

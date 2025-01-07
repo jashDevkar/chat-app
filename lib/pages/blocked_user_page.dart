@@ -8,11 +8,12 @@ import 'package:flutter/material.dart';
 class BlockedUserPage extends StatelessWidget {
   BlockedUserPage({super.key});
 
-  ChatService _chatService = ChatService();
-  AuthService _authService = AuthService();
+  final ChatService _chatService = ChatService();
+  final AuthService _authService = AuthService();
 
   void _showDialogToUnblock(context, {required String userEmail}) {
     showDialogOnLogout(context, content: 'Unblock $userEmail ?',
+      scaffoldMessage: '$userEmail unblocked!',
         onPressCallBack: () async {
       _chatService.unBlockUser(userEmail: userEmail);
     }, title: 'Unblock', buttonText: 'Unblock');
@@ -54,17 +55,38 @@ class BlockedUserPage extends StatelessWidget {
             );
           }
 
-          return ListView(
-            padding: const EdgeInsets.only(top: 10.0),
-            children: data!.map((user) {
-              return UserTile(
-                data: user,
-                onTapCallBack: () {
-                  _showDialogToUnblock(context, userEmail: user['email']);
-                },
-              );
-            }).toList(),
-          );
+          return ListView.builder(
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                if (data.isEmpty) {
+                  return const Center(
+                    child: Text('No blocked users!'),
+                  );
+                }
+
+                return UserTile(
+                  userEmail: data[index],
+                  onTapCallBack: () {
+                    _showDialogToUnblock(context, userEmail: data[index]);
+                  },
+                );
+              });
         });
   }
 }
+
+
+
+
+
+// ListView(
+//             padding: const EdgeInsets.only(top: 10.0),
+//             children: data!.map((user) {
+//               return UserTile(
+//                 userEmail: user,
+//                 onTapCallBack: () {
+//                   _showDialogToUnblock(context, userEmail: user['email']);
+//                 },
+//               );
+//             }).toList(),
+//           );

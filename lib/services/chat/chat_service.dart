@@ -3,7 +3,6 @@ import 'package:chat_app/services/auth/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ChatService extends ChangeNotifier {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -104,7 +103,7 @@ class ChatService extends ChangeNotifier {
         doc.reference.delete();
       }
     } catch (e) {
-      print(e);
+      throw Error();
     }
   }
 
@@ -146,23 +145,14 @@ class ChatService extends ChangeNotifier {
   }
 
   ///get stream of blocked users
-  Stream<List<Map<String, dynamic>>> getBlockedUserStream(
-      {required String userId}) {
+  Stream<List<String>> getBlockedUserStream({required String userId}) {
     return _firebaseFirestore
         .collection('Users')
         .doc(userId)
         .collection('BlockedUsers')
         .snapshots()
         .asyncMap((QuerySnapshot snapshot) async {
-      List blockedUserEmails =
-          snapshot.docs.map((DocumentSnapshot doc) => doc.id).toList();
-
-      final userDocs = await Future.wait(blockedUserEmails
-          .map((id) => _firebaseFirestore.collection('Users').doc(id).get()));
-
-      return userDocs
-          .map((DocumentSnapshot doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      return snapshot.docs.map((DocumentSnapshot doc) => doc.id).toList();
     });
   }
 }

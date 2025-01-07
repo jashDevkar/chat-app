@@ -10,7 +10,8 @@ class MyTextfield extends StatelessWidget {
       {super.key,
       required this.hintText,
       required this.controller,
-      required this.isObscure,this.focusNode});
+      required this.isObscure,
+      this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,8 @@ class MyTextfield extends StatelessWidget {
         focusNode: focusNode,
         obscureText: isObscure,
         cursorColor: Colors.black,
+        keyboardType:
+            isObscure ? TextInputType.text : TextInputType.emailAddress,
         style: const TextStyle(color: Colors.black),
         controller: controller,
         decoration: InputDecoration(

@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UserTile extends StatelessWidget {
-  final Map<String, dynamic> data;
+  final String userEmail;
 
   final void Function() onTapCallBack;
-  const UserTile({super.key, required this.data, required this.onTapCallBack});
+  const UserTile(
+      {super.key, required this.userEmail, required this.onTapCallBack});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class UserTile extends StatelessWidget {
       onTap: onTapCallBack,
       child: Card(
         color: Theme.of(context).cardColor,
-        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
         shape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Padding(
@@ -36,7 +37,7 @@ class UserTile extends StatelessWidget {
 
               ///email
               Text(
-                data['email'],
+                userEmail,
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
