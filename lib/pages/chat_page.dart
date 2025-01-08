@@ -15,9 +15,9 @@ class ChatPage extends StatelessWidget {
 
   void sendMessage() async {
     if (chatController.text.isNotEmpty) {
-      chatController.clear();
       await _chatService.sendMessage(
           recieverId: recieverId, text: chatController.text);
+      chatController.clear();
     }
   }
 
